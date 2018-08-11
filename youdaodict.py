@@ -1,30 +1,35 @@
-import requests,time,random,hashlib
+import requests
+import time
+import random
+import hashlib
 import urllib.parse
 import json
+import re
 
 
-url="http://fanyi.youdao.com/translate_o?smartresult=dict&smartresult=rule"
-key=input('请输入要查询的内容')
-ctime=int(time.time()*1000)
-salt=str(ctime+random.randint(1,10))#1111
-sign=hashlib.md5(("fanyideskweb" + key + salt + "ebSeFb%=XZ%T[KZ)c(sy!").encode('utf-8')).hexdigest()#22222
+url = "http://fanyi.youdao.com/translate_o?smartresult=dict&smartresult=rule"
+key = input('请输入要查询的内容')
+ctime = int(time.time() * 1000)
+salt = str(ctime + random.randint(1, 10))  # 1111
+sign = hashlib.md5(("fanyideskweb" + key + salt +
+                    "ebSeFb%=XZ%T[KZ)c(sy!").encode('utf-8')).hexdigest()  # 22222
 
-data={
-    "i":key,
-    "from":"AUTO",
-    "to":'AUTO',
-    "smartresult":"dict",
-    "client":"fanyideskweb",
-    "salt":salt,
-    "sign":sign,
-    "doctype":"json",
-    "version":"2.1",
-    "keyfrom":"fanyi.web",
-    "action":"FY_BY_REALTIME",
-    "typoResult":"false",
+data = {
+    "i": key,
+    "from": "AUTO",
+    "to": 'AUTO',
+    "smartresult": "dict",
+    "client": "fanyideskweb",
+    "salt": salt,
+    "sign": sign,
+    "doctype": "json",
+    "version": "2.1",
+    "keyfrom": "fanyi.web",
+    "action": "FY_BY_REALTIME",
+    "typoResult": "false",
 
 }
-head={
+head = {
 }
 head['Accept'] = 'application/json, text/javascript, */*; q=0.01'
 head['Accept-Encoding'] = 'gzip, deflate'
@@ -41,8 +46,8 @@ head[
     'User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
 head['X-Requested-With'] = 'XMLHttpRequest'
 
-da=urllib.parse.urlencode(data).encode('utf-8')
+da = urllib.parse.urlencode(data).encode('utf-8')
 
-req=requests.post(url,da,headers=head).text
-resp=json.loads(req)
+req = requests.post(url, da, headers=head).text
+resp = json.loads(req)
 print(resp['translateResult'][0][0]['tgt'])
